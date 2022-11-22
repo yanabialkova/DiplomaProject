@@ -22,8 +22,7 @@ public class DataHelper {
         return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
     }
 
-    public static CardInfo generateDataWithDeclineCard() {
-
+    public static CardInfo generateDataWithDeclinedCard() {
         var randomName = faker.name().fullName();
         var randomCvc = faker.number().digits(3);
         return new CardInfo(numberDeclinedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
@@ -40,7 +39,11 @@ public class DataHelper {
         var randomName = faker.name().fullName();
         var randomCvc = faker.number().digits(3);
         return  new CardInfo(numberApprovedCard, month, year, randomName, randomCvc);
-
+    }
+    public static CardInfo generateDataWithDeclineCardAndParametrizedMonthAndYear(String month, String year) {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return  new CardInfo(numberDeclinedCard, month, year, randomName, randomCvc);
     }
 
     public static CardInfo generateDataWithParamLengthCardOwnerName(int length) {
@@ -49,9 +52,13 @@ public class DataHelper {
         return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
     }
 
-    public static CardInfo generateDataWithParamCardOwnerName(String name) {
+    public static CardInfo generateDataWithParamCardOwnerNameApprovedCard(String name) {
         var randomCvc = faker.number().digits(3);
         return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), name, randomCvc);
+    }
+    public static CardInfo generateDataWithParamCardOwnerNameDeclineCard(String name) {
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberDeclinedCard, getCurrentMonth(), String.valueOf(validYear), name, randomCvc);
     }
 
     public static CardInfo generateDataExpiredCardForOneMonth() {
