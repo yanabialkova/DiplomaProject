@@ -28,7 +28,7 @@ gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"
 
 <h3> Процедура остановки автотестов </h3> 
 
-1. После выполнения всех тестов остановить docker контейнер командой в консоли: docker-compose down
+ После выполнения всех тестов остановить docker контейнер командой в консоли: docker-compose down
  
 
 
