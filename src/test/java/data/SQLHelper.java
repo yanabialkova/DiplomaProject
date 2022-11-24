@@ -16,16 +16,13 @@ public class SQLHelper {
     private static  String userName = System.getProperty("db.username");
     private static  String password = System.getProperty("db.password");
 
-
     public SQLHelper(){
     }
-
 
     @SneakyThrows
     private static Connection getConn() {
         return DriverManager.getConnection(url, userName, password);
     }
-
 
     public static DataHelper.CreditCardData getCreditCardData() {
         var cardDataSQL =  "SELECT * FROM credit_request_entity ORDER BY created DESC LIMIT 1";
@@ -62,7 +59,6 @@ public class SQLHelper {
         }
         return null;
     }
-
 
     @SneakyThrows
     public static void cleanDatabase() {

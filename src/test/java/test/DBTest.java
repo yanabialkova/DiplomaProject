@@ -36,10 +36,29 @@ public class DBTest {
     }
 
     @Test
+    @DisplayName("Should added credit data to database with APPROVED through API")
     void shouldSuccessTransactionWithApprovedCreditCardThroughAPI() {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         APIHelper.createCredit(cardInfo);
         var creditCardData = SQLHelper.getCreditCardData();
         assertEquals("APPROVED", creditCardData.getStatus());
+
+    }
+
+    @Test
+    void shouldSuccessTransactionWithDeclinedPaymentCardThroughAPI() {
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
+        APIHelper.createPayment(cardInfo);
+        var paymentCardData = SQLHelper.getPaymentCardData();
+        assertEquals("DECLINED", paymentCardData.getStatus());
+
+    }
+    @Test
+    void shouldSuccessTransactionWithDeclinedCreditCardThroughAPI() {
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
+        APIHelper.createCredit(cardInfo);
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("DECLINED", creditCardData.getStatus());
+
     }
 }
