@@ -128,7 +128,7 @@ public class DataHelper {
     @AllArgsConstructor
     public static class CreditCardData {
         private String id;
-        private String bank_id; //пока будем брать данные из поля bank_id вместо id
+        private String bank_id;
         private String created;
         private String status;
     }
@@ -141,7 +141,7 @@ public class DataHelper {
         private String amount;
         private String created;
         private String status;
-        private String transaction_id; //пока будем брать данные из поля transaction_id вместо id
+        private String transaction_id;
     }
 
     @Data
