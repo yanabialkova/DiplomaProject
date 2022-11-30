@@ -28,15 +28,19 @@ public class CreditCardTest {
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
     }
-    @AfterEach
-    void tearDown() {
-        closeWindow();
+
+    @Test
+    void shouldSuccessTransactionWithDeclinedCard() {
+        var toCreditCard = mainPage.creditPage();
+        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        toCreditCard.insertValidCreditCardDataForBank(cardInfo);
+        toCreditCard.checkErrorMessDeclineFromBank();
     }
 
     @Test
     void shouldSuccessTransactionWithPaymentCard() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkApprovedMessFromBank();
     }
@@ -46,7 +50,7 @@ public class CreditCardTest {
         var toCreditCard = mainPage.creditPage();
         var currentMonth = DataHelper.getCurrentMonth();
         var maxYear = Integer.parseInt(DataHelper.getCurrentYear()) + 5;
-        var cardInfo = DataHelper.generateDataWithDeclineCardAndParametrizedMonthAndYear(currentMonth,
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndParametrizedMonthAndYear(currentMonth,
                 String.valueOf(maxYear));
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkApprovedMessFromBank();
@@ -57,25 +61,25 @@ public class CreditCardTest {
     @Test
     void shouldDeclineWithRandomPaymentCard() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setNumber("4444 4444 4444 3456");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkErrorMessDeclineFromBank();
+        toCreditCard.checkApprovedMessFromBank();
     }
 
     @Test
     void shouldShowErrorIfAllCardNumberFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setNumber("0000 0000 0000 0000");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkErrorMessDeclineFromBank();
+        toCreditCard.checkApprovedMessFromBank();
     }
 
     @Test
     void shouldShowErrorIfAllCardNumberFieldAtEmpty() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setNumber("");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
@@ -84,7 +88,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllCardNumberFieldAreSpecialCharacters() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setNumber("#$%% ^%$$ &&%% &%*&");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
@@ -94,7 +98,7 @@ public class CreditCardTest {
     @Test
     void shouldDeclineWithFalseMonth() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclineCardAndParametrizedMonthAndYear("90","22");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndParametrizedMonthAndYear("90","22");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderMonthField("Неверно указан срок действия карты");
     }
@@ -102,7 +106,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllMonthNumberFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setMonth("00");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderMonthField("Неверно указан срок действия карты");
@@ -112,7 +116,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllMonthNumberFieldAtEmpty() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setMonth("");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderMonthField("Неверный формат");
@@ -121,7 +125,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllMonthNumberFieldAreSpecialCharacters() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setMonth("#$");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderMonthField("Неверный формат");
@@ -131,7 +135,7 @@ public class CreditCardTest {
     @Test
     void shouldDeclineWithFalseYear() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclineCardAndParametrizedMonthAndYear("10","88");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndParametrizedMonthAndYear("10","88");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderYearField("Неверно указан срок действия карты");
     }
@@ -139,7 +143,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllYearNumberFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setYear("00");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderYearField ("Истёк срок действия карты");
@@ -148,7 +152,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllYearNumberFieldAtEmpty() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setYear("");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderYearField("Неверный формат");
@@ -157,7 +161,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllYearNumberFieldAreSpecialCharacters() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setYear("#$");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderYearField("Неверный формат");
@@ -167,7 +171,7 @@ public class CreditCardTest {
     @Test
     void shouldDeclineWithFalseName() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameDeclineCard("ИВАНОВ ИВАНОВ");
+        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("ИВАНОВ ИВАНОВ");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkErrorMessDeclineFromBank();
     }
@@ -175,7 +179,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllNameFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameDeclineCard("0000 00000");
+        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("0000 00000");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkErrorMessDeclineFromBank();
     }
@@ -183,7 +187,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllNameFieldAtEmpty() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameDeclineCard("");
+        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCardOwnerField("Поле обязательно для заполнения");
     }
@@ -191,7 +195,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllNameFieldAreSpecialCharacters() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameDeclineCard("%::.;;(");
+        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("%::.;;(");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkErrorMessDeclineFromBank();
     }

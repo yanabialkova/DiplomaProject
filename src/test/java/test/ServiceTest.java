@@ -15,7 +15,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DBTest {
+public class ServiceTest {
 
     @BeforeAll
     static void setUpAll() {

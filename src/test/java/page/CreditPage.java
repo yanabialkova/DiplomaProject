@@ -27,7 +27,6 @@ public class CreditPage {
     private SelenideElement errorMessWithDecline = Selenide.$x("//div[text()='Ошибка!" +
             " Банк отказал в проведении операции.']");
     private SelenideElement approvedMess = Selenide.$x("//div[text()='Операция одобрена Банком.']");
-
     private SelenideElement warningCardNumberField = Selenide.$x("//span[text()='Номер карты']" +
             "/following-sibling::span[@class='input__sub']");
     private SelenideElement warningMonthField = Selenide.$x("//span[text()='Месяц']" +
@@ -52,40 +51,41 @@ public class CreditPage {
         proceedBtn.click();
     }
 
+    public void checkWarningUnderCardNumberField(String warningText) {
+        warningCardNumberField.shouldHave(text(warningText));
+        warningCardNumberField.shouldBe(visible);
+    }
+
+    public void checkWarningUnderMonthField(String warningText) {
+        warningMonthField.shouldHave(text(warningText));
+        warningMonthField.shouldBe(visible);
+    }
+
+    public void checkWarningUnderYearField(String warningText) {
+        warningYearField.shouldHave(text(warningText));
+        warningYearField.shouldBe(visible);
+    }
+
+    public void checkWarningUnderCardOwnerField(String warningText) {
+        warningCardOwnerField.shouldHave(text(warningText));
+        warningCardOwnerField.shouldBe(visible);
+    }
+
+    public void checkWarningUnderCvcField(String warningText) {
+        warningCvcField.shouldHave(text(warningText));
+        warningCvcField.shouldBe(visible);
+    }
+
     public void clickProceedButton() {
         proceedBtn.click();
     }
+
     public void checkErrorMessDeclineFromBank() {
         errorMessWithDecline.shouldBe(visible, Duration.ofSeconds(10));
     }
 
     public void checkApprovedMessFromBank() {
         approvedMess.shouldBe(visible, Duration.ofSeconds(10));
-    }
-
-    public void checkWarningUnderCardNumberField(String warningText) {
-        warningCardNumberField.shouldBe(visible);
-        warningCardNumberField.shouldHave(text(warningText));
-    }
-
-    public void checkWarningUnderMonthField(String warningText) {
-        warningMonthField.shouldBe(visible);
-        warningMonthField.shouldHave(text(warningText));
-    }
-
-    public void checkWarningUnderYearField(String warningText) {
-        warningYearField.shouldBe(visible);
-        warningYearField.shouldHave(text(warningText));
-    }
-
-    public void checkWarningUnderCardOwnerField(String warningText) {
-        warningCardOwnerField.shouldBe(visible);
-        warningCardOwnerField.shouldHave(text(warningText));
-    }
-
-    public void checkWarningUnderCvcField(String warningText) {
-        warningCvcField.shouldBe(visible);
-        warningCvcField.shouldHave(text(warningText));
     }
 
     public void notCheckWarningUnderAllFields() {
