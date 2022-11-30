@@ -28,17 +28,21 @@ public class PaymentTest {
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
     }
-    @AfterEach
-    void tearDown() {
-        closeWindow();
-    }
 
     @Test
     void shouldSuccessTransactionWithPaymentCard() {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkApprovedMessFromBank();
+        toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
+    }
+
+    @Test
+    void shouldSuccessTransactionWithDeclinedCard() {
+        var toPaymentPage = mainPage.paymentPage();
+        var cardInfo = DataHelper.generateDataWithDeclinedCard();
+        toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
+        toPaymentPage.checkErrorMessDeclineFromBank();
     }
 
     @Test

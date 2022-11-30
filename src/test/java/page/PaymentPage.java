@@ -46,6 +46,30 @@ public class PaymentPage {
         cvcField.setValue(cardInfo.getCvc());
         proceedBtn.click();
     }
+    public void checkWarningUnderCardNumberField(String warningText) {
+        warningCardNumberField.shouldHave(text(warningText));
+        warningCardNumberField.shouldBe(visible);
+    }
+
+    public void checkWarningUnderMonthField(String warningText) {
+        warningMonthField.shouldHave(text(warningText));
+        warningMonthField.shouldBe(visible);
+    }
+
+    public void checkWarningUnderYearField(String warningText) {
+        warningYearField.shouldHave(text(warningText));
+        warningYearField.shouldBe(visible);
+    }
+
+    public void checkWarningUnderCardOwnerField(String warningText) {
+        warningCardOwnerField.shouldHave(text(warningText));
+        warningCardOwnerField.shouldBe(visible);
+    }
+
+    public void checkWarningUnderCvcField(String warningText) {
+        warningCvcField.shouldHave(text(warningText));
+        warningCvcField.shouldBe(visible);
+    }
 
     public  void clickProceedButton() {
         proceedBtn.click();
@@ -57,32 +81,6 @@ public class PaymentPage {
     public void checkApprovedMessFromBank() {
         approvedMess.shouldBe(visible, Duration.ofSeconds(10));
     }
-
-    public void checkWarningUnderCardNumberField(String warningText) {
-        warningCardNumberField.shouldBe(visible);
-        warningCardNumberField.shouldHave(text(warningText));
-    }
-
-    public void checkWarningUnderMonthField(String warningText) {
-        warningMonthField.shouldBe(visible);
-        warningMonthField.shouldHave(text(warningText));
-    }
-
-    public void checkWarningUnderYearField(String warningText) {
-        warningYearField.shouldBe(visible);
-        warningYearField.shouldHave(text(warningText));
-    }
-
-    public void checkWarningUnderCardOwnerField(String warningText) {
-        warningCardOwnerField.shouldBe(visible);
-        warningCardOwnerField.shouldHave(text(warningText));
-    }
-
-    public void checkWarningUnderCvcField(String warningText) {
-        warningCvcField.shouldBe(visible);
-        warningCvcField.shouldHave(text(warningText));
-    }
-
     public void notCheckWarningUnderAllFields() {
         warningCardNumberField.shouldNotBe(visible);
         warningMonthField.shouldNotBe(visible);
