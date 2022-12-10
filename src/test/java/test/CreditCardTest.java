@@ -2,6 +2,8 @@ package test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import data.APIHelper;
+import data.SQLHelper;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import data.DataHelper;
@@ -10,6 +12,7 @@ import page.MainPage;
 
 import static com.codeborne.selenide.Selenide.closeWindow;
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreditCardTest {
     MainPage mainPage = open("http://localhost:8080/", MainPage.class);
@@ -27,6 +30,23 @@ public class CreditCardTest {
     @AfterAll
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
+    }
+
+    @Test
+    void shouldSuccessTransactionWithApprovedPaymentCardThroughAPI() {
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
+        APIHelper.createCard(cardInfo);
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("APPROVED", creditCardData.getStatus());
+    }
+
+    @Test
+    void shouldSuccessTransactionWithDeclinedPaymentCardThroughAPI() {
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
+        APIHelper.createCard(cardInfo);
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("DECLINED", creditCardData.getStatus());
+
     }
 
     @Test
@@ -57,7 +77,6 @@ public class CreditCardTest {
     }
 
     //card
-
     @Test
     void shouldDeclineWithRandomPaymentCard() {
         var toCreditCard = mainPage.creditPage();
@@ -109,7 +128,7 @@ public class CreditCardTest {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setMonth("00");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkWarningUnderMonthField("Неверно указан срок действия карты");
+        toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
 
     }
 
@@ -173,7 +192,7 @@ public class CreditCardTest {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("ИВАНОВ ИВАНОВ");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkErrorMessDeclineFromBank();
+        toCreditCard.checkWarningUnderCardOwnerField("Неверный формат");
     }
 
     @Test
@@ -181,7 +200,7 @@ public class CreditCardTest {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("0000 00000");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkErrorMessDeclineFromBank();
+        toCreditCard.checkWarningUnderCardOwnerField("Неверный формат");
     }
 
     @Test
@@ -197,7 +216,7 @@ public class CreditCardTest {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("%::.;;(");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkErrorMessDeclineFromBank();
+        toCreditCard.checkWarningUnderCardOwnerField("Неверный формат");
     }
 
     //cvc
@@ -216,7 +235,7 @@ public class CreditCardTest {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setCvc("000");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkErrorMessDeclineFromBank();
+        toCreditCard.checkWarningUnderCvcField("Неверный формат");
     }
 
     @Test
