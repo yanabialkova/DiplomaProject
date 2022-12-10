@@ -17,7 +17,7 @@ public class APIHelper {
             .log(LogDetail.ALL)
             .build();
 
-    public static void createPayment(DataHelper.CardInfo cardInfo) {
+    public static void createCard(DataHelper.CardInfo cardInfo) {
         given()
                 .spec(requestSpec)
                 .body(cardInfo)
@@ -27,13 +27,4 @@ public class APIHelper {
                 .statusCode(200);
     }
 
-    public static void createCredit(DataHelper.CardInfo cardInfo) {
-        given()
-                .spec(requestSpec)
-                .body(cardInfo)
-                .when()
-                .post("/api/v1/credit")
-                .then()
-                .statusCode(200);
-    }
 }

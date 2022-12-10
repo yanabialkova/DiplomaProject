@@ -45,28 +45,15 @@ public class DataHelper {
         var randomCvc = faker.number().digits(3);
         return  new CardInfo(numberDeclinedCard, month, year, randomName, randomCvc);
     }
-
-    public static CardInfo generateDataWithParamLengthCardOwnerName(int length) {
-        var randomName = faker.lorem().fixedString(length);
-        var randomCvc = faker.number().digits(3);
-        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    public static String getCurrentMonth() {
+        LocalDate date = LocalDate.now();
+        String currentMonth = date.format(DateTimeFormatter.ofPattern("MM"));
+        return currentMonth;
     }
 
     public static CardInfo generateDataWithParamCardOwnerNameApprovedCard(String name) {
         var randomCvc = faker.number().digits(3);
         return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), name, randomCvc);
-    }
-    public static CardInfo generateDataWithParamCardOwnerNameDeclineCard(String name) {
-        var randomCvc = faker.number().digits(3);
-        return new CardInfo(numberDeclinedCard, getCurrentMonth(), String.valueOf(validYear), name, randomCvc);
-    }
-
-
-
-    public static String getCurrentMonth() {
-        LocalDate date = LocalDate.now();
-        String currentMonth = date.format(DateTimeFormatter.ofPattern("MM"));
-        return currentMonth;
     }
 
     public static String getCurrentYear() {

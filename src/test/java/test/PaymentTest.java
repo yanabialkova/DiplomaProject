@@ -6,10 +6,13 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import data.DataHelper;
 import page.MainPage;
+import data.APIHelper;
+import data.SQLHelper;
 
 
 import static com.codeborne.selenide.Selenide.closeWindow;
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PaymentTest {
     MainPage mainPage = open("http://localhost:8080/", MainPage.class);
@@ -30,7 +33,24 @@ public class PaymentTest {
     }
 
     @Test
-    void shouldSuccessTransactionWithPaymentCard() {
+    void shouldSuccessTransactionWithApprovedPaymentCardThroughAPI() {
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
+        APIHelper.createCard(cardInfo);
+        var paymentCardData = SQLHelper.getPaymentCardData();
+        assertEquals("APPROVED", paymentCardData.getStatus());
+    }
+
+    @Test
+    void shouldSuccessTransactionWithDeclinedPaymentCardThroughAPI() {
+        var cardInfo = DataHelper.generateDataWithApprovedCard();
+        APIHelper.createCard(cardInfo);
+        var paymentCardData = SQLHelper.getPaymentCardData();
+        assertEquals("DECLINED", paymentCardData.getStatus());
+
+    }
+
+    @Test
+    void shouldSuccessTransactionApprovedCard() {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
@@ -57,13 +77,13 @@ public class PaymentTest {
     }
 
     //card
-
     @Test
     void shouldDeclineWithRandomPaymentCard() {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithRandomCardNumber();
+        cardInfo.setNumber("4444 4444 4444 3456");
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkErrorMessDeclineFromBank();
+        toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
     }
 
     @Test
@@ -72,8 +92,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setNumber("0000 0000 0000 0000");
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkErrorMessDeclineFromBank();
-    }
+        toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");    }
 
     @Test
     void shouldShowErrorIfAllCardNumberFieldAtEmpty() {
@@ -108,7 +127,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setMonth("00");
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkErrorMessDeclineFromBank();
+        toPaymentPage.checkWarningUnderCardNumberField("Неверный формат");
     }
 
     @Test
@@ -130,7 +149,6 @@ public class PaymentTest {
     }
 
     //year
-
     @Test
     void shouldDeclineWithFalseYear() {
         var toPaymentPage = mainPage.paymentPage();
@@ -167,13 +185,12 @@ public class PaymentTest {
     }
 
     //name
-
     @Test
     void shouldDeclineWithFalseName() {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("ИВАНОВ ИВАНОВ");
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkErrorMessDeclineFromBank();
+        toPaymentPage.checkWarningUnderCardOwnerField("Неверный формат");
     }
 
     @Test
@@ -181,7 +198,7 @@ public class PaymentTest {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("0000 00000");
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkErrorMessDeclineFromBank();
+        toPaymentPage.checkWarningUnderCardOwnerField("Неверный формат");
     }
 
     @Test
@@ -194,14 +211,13 @@ public class PaymentTest {
 
     @Test
     void shouldShowErrorIfAllNameFieldAreSpecialCharacters() {
-            var toPaymentPage = mainPage.paymentPage();
-            var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("%::.;;(");
-            toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-            toPaymentPage.checkErrorMessDeclineFromBank();
+        var toPaymentPage = mainPage.paymentPage();
+        var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("%::.;;(");
+        toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
+        toPaymentPage.checkWarningUnderCardOwnerField("Неверный формат");
     }
 
     //cvc
-
     @Test
     void shouldDeclineWithFalseCvc() {
         var toPaymentPage = mainPage.paymentPage();
@@ -217,7 +233,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         cardInfo.setCvc("000");
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkErrorMessDeclineFromBank();
+        toPaymentPage.checkWarningUnderCvcField("Неверный формат");
     }
 
     @Test
