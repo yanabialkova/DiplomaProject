@@ -21,11 +21,11 @@ java "-Dspring.datasource.url=jdbc:postgresql://localhost:5432/app" "-Dspring.da
 
 * для mysql
 
-gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app"
+./gradlew test "-Ddb.url=jdbc:mysql://localhost:3306/app" "-Ddb.username=app" "-Ddb.password=pass"
 
 * для postgresql
 
-gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"
+./gradlew test "-Ddb.url=jdbc:postgresql://localhost:5432/app" "-Ddb.username=app" "-Ddb.password=pass"
 
 <h3> Процедура остановки автотестов </h3> 
 
