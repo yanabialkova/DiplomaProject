@@ -80,26 +80,23 @@ public class CreditCardTest {
     @Test
     void shouldDeclineWithRandomPaymentCard() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setNumber("4444 4444 4444 3456");
+        var cardInfo = DataHelper.generateDataWithNotApprovedCard();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkApprovedMessFromBank();
+        toCreditCard.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
     }
 
     @Test
     void shouldShowErrorIfAllCardNumberFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setNumber("0000 0000 0000 0000");
+        var cardInfo = DataHelper.generateDataWithCardNumberFieldAreZero();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkApprovedMessFromBank();
+        toCreditCard.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
     }
 
     @Test
-    void shouldShowErrorIfAllCardNumberFieldAtEmpty() {
+    void shouldShowErrorIfAllCardNumberFieldAreEmpty() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setNumber("");
+        var cardInfo = DataHelper.generateDataWithEmptyCardNumber();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
     }
@@ -107,8 +104,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllCardNumberFieldAreSpecialCharacters() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setNumber("#$%% ^%$$ &&%% &%*&");
+        var cardInfo = DataHelper.generateDataWithCardNumberSpecialCharacters();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
     }
@@ -125,18 +121,15 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllMonthNumberFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setMonth("00");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllMonthNumberFieldAreZero();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
-
     }
 
     @Test
-    void shouldShowErrorIfAllMonthNumberFieldAtEmpty() {
+    void shouldShowErrorIfAllMonthNumberFieldAreEmpty() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setMonth("");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllMonthNumberFieldAreEmpty();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderMonthField("Неверный формат");
     }
@@ -144,8 +137,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllMonthNumberFieldAreSpecialCharacters() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setMonth("#$");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllMonthNumberFieldAreSpecialCharacters();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderMonthField("Неверный формат");
     }
@@ -162,17 +154,15 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllYearNumberFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setYear("00");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllYearNumberFieldAreZero();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderYearField ("Истёк срок действия карты");
     }
 
     @Test
-    void shouldShowErrorIfAllYearNumberFieldAtEmpty() {
+    void shouldShowErrorIfAllYearNumberFieldAreEmpty() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setYear("");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllYearNumberFieldAreEmpty();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderYearField("Неверный формат");
     }
@@ -180,8 +170,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllYearNumberFieldAreSpecialCharacters() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setYear("#$");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllYearNumberFieldAreSpecialCharacters();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderYearField("Неверный формат");
     }
@@ -204,7 +193,7 @@ public class CreditCardTest {
     }
 
     @Test
-    void shouldShowErrorIfAllNameFieldAtEmpty() {
+    void shouldShowErrorIfAllNameFieldAreEmpty() {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("");
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
@@ -223,8 +212,7 @@ public class CreditCardTest {
     @Test
     void shouldDeclineWithFalseCvc() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setCvc("23");
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFalse();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCvcField("Неверный формат");
     }
@@ -232,17 +220,15 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllCvcNumberFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setCvc("000");
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFieldAreZero();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCvcField("Неверный формат");
     }
 
     @Test
-    void shouldShowErrorIfAllCvcNumberFieldAtEmpty() {
+    void shouldShowErrorIfAllCvcNumberFieldAreEmpty() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setCvc("");
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFieldAreEmpty();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCvcField("Неверный формат");
     }
@@ -250,8 +236,7 @@ public class CreditCardTest {
     @Test
     void shouldShowErrorIfAllCvcNumberFieldAreSpecialCharacters() {
         var toCreditCard = mainPage.creditPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setCvc("#$!");
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFieldAreSpecialCharacters();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCvcField("Неверный формат");
     }

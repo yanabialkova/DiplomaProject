@@ -22,7 +22,6 @@ public class CreditPage {
             "/following-sibling::span/input");
     private SelenideElement cvcField = Selenide.$x("//span[text()='CVC/CVV']" +
             "/following-sibling::span/input");
-
     private SelenideElement proceedBtn = Selenide.$x("//span[text()='Продолжить']");
     private SelenideElement errorMessWithDecline = Selenide.$x("//div[text()='Ошибка!" +
             " Банк отказал в проведении операции.']");
@@ -76,6 +75,7 @@ public class CreditPage {
         warningCvcField.shouldBe(visible);
     }
 
+
     public void clickProceedButton() {
         proceedBtn.click();
     }
@@ -88,11 +88,4 @@ public class CreditPage {
         approvedMess.shouldBe(visible, Duration.ofSeconds(10));
     }
 
-    public void notCheckWarningUnderAllFields() {
-        warningCardNumberField.shouldNotBe(visible);
-        warningMonthField.shouldNotBe(visible);
-        warningYearField.shouldNotBe(visible);
-        warningCardOwnerField.shouldNotBe(visible);
-        warningCvcField.shouldNotBe(visible);
-    }
 }
