@@ -1,7 +1,9 @@
 package data;
 
 import com.github.javafaker.Faker;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +16,9 @@ public class DataHelper {
     private static int validYear = Integer.parseInt(getCurrentYear()) + 1;
     private static String numberApprovedCard = "4444 4444 4444 4441";
     private static String numberDeclinedCard = "4444 4444 4444 4442";
+    private static String NotApprovedCard = "8787 7878 5545 8989";
+    private static String Zero = "0000 0000 0000 0000";
+    private static String SpecialCharacters = "#$%% ^%$$ &&%% &%*&";
 
 
     public static CardInfo generateDataWithApprovedCard() {
@@ -26,6 +31,90 @@ public class DataHelper {
         var randomName = faker.name().fullName();
         var randomCvc = faker.number().digits(3);
         return new CardInfo(numberDeclinedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+    //cvc
+    public static CardInfo generateDataWithApprovedCardIfAllCvcNumberFieldAreSpecialCharacters() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "^&*");
+    }
+
+    public static CardInfo generateDataWithApprovedCardIfAllCvcNumberFieldAreEmpty() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "");
+    }
+
+    public static CardInfo generateDataWithApprovedCardIfAllCvcNumberFieldAreZero() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "000");
+    }
+    public static CardInfo generateDataWithApprovedCardIfAllCvcNumberFalse() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, "23");
+    }
+
+    //year
+    public static CardInfo generateDataWithApprovedCardAndAllYearNumberFieldAreEmpty() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf(""), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndAllYearNumberFieldAreSpecialCharacters() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf("&*"), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndAllYearNumberFieldAreZero() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, getCurrentMonth(), String.valueOf("00"), randomName, randomCvc);
+    }
+
+    //month
+    public static CardInfo generateDataWithApprovedCardAndAllMonthNumberFieldAreEmpty() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, "", String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndAllMonthNumberFieldAreSpecialCharacters() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, "&*", String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithApprovedCardAndAllMonthNumberFieldAreZero() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(numberApprovedCard, "00", String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    //card
+    public static CardInfo generateDataWithNotApprovedCard() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(NotApprovedCard, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+
+    public static CardInfo generateDataWithEmptyCardNumber() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo("", getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+    public static CardInfo generateDataWithCardNumberFieldAreZero() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(Zero, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
+    }
+    public static CardInfo generateDataWithCardNumberSpecialCharacters() {
+        var randomName = faker.name().fullName();
+        var randomCvc = faker.number().digits(3);
+        return new CardInfo(SpecialCharacters, getCurrentMonth(), String.valueOf(validYear), randomName, randomCvc);
     }
 
     public static CardInfo generateDataWithRandomCardNumber() {
@@ -40,6 +129,7 @@ public class DataHelper {
         var randomCvc = faker.number().digits(3);
         return  new CardInfo(numberApprovedCard, month, year, randomName, randomCvc);
     }
+
     public static CardInfo generateDataWithDeclineCardAndParametrizedMonthAndYear(String month, String year) {
         var randomName = faker.name().fullName();
         var randomCvc = faker.number().digits(3);
@@ -49,6 +139,12 @@ public class DataHelper {
         LocalDate date = LocalDate.now();
         String currentMonth = date.format(DateTimeFormatter.ofPattern("MM"));
         return currentMonth;
+    }
+
+    public static String getNotCurrentMonth() {
+        LocalDate date = LocalDate.now();
+        String currentMonth = date.format(DateTimeFormatter.ofPattern("MM"));
+        return currentMonth + 20;
     }
 
     public static CardInfo generateDataWithParamCardOwnerNameApprovedCard(String name) {
@@ -62,9 +158,13 @@ public class DataHelper {
         return currentYear;
     }
 
+    public static String invalidCard() {
+        return faker.numerify("#### #### #### ####");
+    }
+
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class CardInfo {
         String number;
         String month;

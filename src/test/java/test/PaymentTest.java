@@ -42,11 +42,10 @@ public class PaymentTest {
 
     @Test
     void shouldSuccessTransactionWithDeclinedPaymentCardThroughAPI() {
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
+        var cardInfo = DataHelper.generateDataWithDeclinedCard();
         APIHelper.createCard(cardInfo);
         var paymentCardData = SQLHelper.getPaymentCardData();
         assertEquals("DECLINED", paymentCardData.getStatus());
-
     }
 
     @Test
@@ -54,7 +53,7 @@ public class PaymentTest {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
+        toPaymentPage.checkApprovedMessFromBank();
     }
 
     @Test
@@ -80,8 +79,7 @@ public class PaymentTest {
     @Test
     void shouldDeclineWithRandomPaymentCard() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithRandomCardNumber();
-        cardInfo.setNumber("4444 4444 4444 3456");
+        var cardInfo = DataHelper.generateDataWithNotApprovedCard();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
     }
@@ -89,16 +87,15 @@ public class PaymentTest {
     @Test
     void shouldShowErrorIfAllCardNumberFieldAreZero() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setNumber("0000 0000 0000 0000");
+        var cardInfo = DataHelper.generateDataWithCardNumberFieldAreZero();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");    }
+        toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
+    }
 
     @Test
-    void shouldShowErrorIfAllCardNumberFieldAtEmpty() {
+    void shouldShowErrorIfAllCardNumberFieldAreEmpty() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setNumber("");
+        var cardInfo = DataHelper.generateDataWithEmptyCardNumber();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCardNumberField("Неверный формат");
     }
@@ -106,8 +103,7 @@ public class PaymentTest {
     @Test
     void shouldShowErrorIfAllCardNumberFieldAreSpecialCharacters() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setNumber("#$%% ^%$$ &&%% &%*&");
+        var cardInfo = DataHelper.generateDataWithCardNumberSpecialCharacters();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCardNumberField("Неверный формат");
     }
@@ -124,17 +120,15 @@ public class PaymentTest {
     @Test
     void shouldShowErrorIfAllMonthNumberFieldAreZero() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setMonth("00");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllMonthNumberFieldAreZero();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCardNumberField("Неверный формат");
     }
 
     @Test
-    void shouldShowErrorIfAllMonthNumberFieldAtEmpty() {
+    void shouldShowErrorIfAllMonthNumberFieldAreEmpty() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setMonth("");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllMonthNumberFieldAreEmpty();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderMonthField("Неверный формат");
     }
@@ -142,8 +136,7 @@ public class PaymentTest {
     @Test
     void shouldShowErrorIfAllMonthNumberFieldAreSpecialCharacters() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setMonth("#$");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllMonthNumberFieldAreSpecialCharacters();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderMonthField("Неверный формат");
     }
@@ -160,17 +153,15 @@ public class PaymentTest {
     @Test
     void shouldShowErrorIfAllYearNumberFieldAreZero() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setYear("00");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllYearNumberFieldAreZero();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderYearField ("Истёк срок действия карты");
     }
 
     @Test
-    void shouldShowErrorIfAllYearNumberFieldAtEmpty() {
+    void shouldShowErrorIfAllYearNumberFieldAreEmpty() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setYear("");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllYearNumberFieldAreEmpty();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderYearField("Неверный формат");
     }
@@ -178,8 +169,7 @@ public class PaymentTest {
     @Test
     void shouldShowErrorIfAllYearNumberFieldAreSpecialCharacters() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setYear("#$");
+        var cardInfo = DataHelper.generateDataWithApprovedCardAndAllYearNumberFieldAreSpecialCharacters();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderYearField("Неверный формат");
     }
@@ -202,7 +192,7 @@ public class PaymentTest {
     }
 
     @Test
-    void shouldShowErrorIfAllNameFieldAtEmpty() {
+    void shouldShowErrorIfAllNameFieldAreEmpty() {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithParamCardOwnerNameApprovedCard("");
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
@@ -221,8 +211,7 @@ public class PaymentTest {
     @Test
     void shouldDeclineWithFalseCvc() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setCvc("23");
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFalse();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCvcField("Неверный формат");
     }
@@ -230,17 +219,15 @@ public class PaymentTest {
     @Test
     void shouldShowErrorIfAllCvcNumberFieldAreZero() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setCvc("000");
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFieldAreZero();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCvcField("Неверный формат");
     }
 
     @Test
-    void shouldShowErrorIfAllCvcNumberFieldAtEmpty() {
+    void shouldShowErrorIfAllCvcNumberFieldAreEmpty() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setCvc("");
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFieldAreEmpty();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCvcField("Неверный формат");
     }
@@ -248,8 +235,7 @@ public class PaymentTest {
     @Test
     void shouldShowErrorIfAllCvcNumberFieldAreSpecialCharacters() {
         var toPaymentPage = mainPage.paymentPage();
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
-        cardInfo.setCvc("#$!");
+        var cardInfo = DataHelper.generateDataWithApprovedCardIfAllCvcNumberFieldAreSpecialCharacters();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
         toPaymentPage.checkWarningUnderCvcField("Неверный формат");
     }

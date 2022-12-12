@@ -22,7 +22,7 @@ public class APIHelper {
                 .spec(requestSpec)
                 .body(cardInfo)
                 .when()
-                .post("/api/v1/pay")
+                .post("/api/v1/pay", "/api/v1/credit")
                 .then()
                 .statusCode(200);
     }
