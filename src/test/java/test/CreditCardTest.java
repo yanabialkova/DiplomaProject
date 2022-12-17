@@ -239,5 +239,4 @@ public class CreditCardTest {
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCvcField("Неверный формат");
     }
-    }
 }
