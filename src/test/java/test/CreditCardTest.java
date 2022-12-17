@@ -42,7 +42,7 @@ public class CreditCardTest {
 
     @Test
     void shouldSuccessTransactionWithDeclinedCreditCardThroughAPI() {
-        var cardInfo = DataHelper.generateDataWithApprovedCard();
+        var cardInfo = DataHelper.generateDataWithDeclinedCard();
         APIHelper.createCreditCard(cardInfo);
         var creditCardData = SQLHelper.getCreditCardData();
         assertEquals("DECLINED", creditCardData.getStatus());
