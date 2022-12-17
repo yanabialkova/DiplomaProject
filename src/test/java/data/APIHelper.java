@@ -22,7 +22,17 @@ public class APIHelper {
                 .spec(requestSpec)
                 .body(cardInfo)
                 .when()
-                .post("/api/v1/pay", "/api/v1/credit")
+                .post("/api/v1/pay")
+                .then()
+                .statusCode(200);
+    }
+
+    public static void createCreditCard(DataHelper.CardInfo cardInfo) {
+        given()
+                .spec(requestSpec)
+                .body(cardInfo)
+                .when()
+                .post("/api/v1/credit")
                 .then()
                 .statusCode(200);
     }

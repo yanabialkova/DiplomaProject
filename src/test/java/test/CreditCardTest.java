@@ -33,22 +33,23 @@ public class CreditCardTest {
     }
 
     @Test
-    void shouldSuccessTransactionWithApprovedPaymentCardThroughAPI() {
+    void shouldSuccessTransactionWithApprovedCreditCardThroughAPI() {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
-        APIHelper.createCard(cardInfo);
+        APIHelper.createCreditCard(cardInfo);
         var creditCardData = SQLHelper.getCreditCardData();
         assertEquals("APPROVED", creditCardData.getStatus());
     }
 
     @Test
-    void shouldSuccessTransactionWithDeclinedPaymentCardThroughAPI() {
+    void shouldSuccessTransactionWithDeclinedCreditCardThroughAPI() {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
-        APIHelper.createCard(cardInfo);
+        APIHelper.createCreditCard(cardInfo);
         var creditCardData = SQLHelper.getCreditCardData();
         assertEquals("DECLINED", creditCardData.getStatus());
 
     }
 
+/*
     @Test
     void shouldSuccessTransactionWithDeclinedCard() {
         var toCreditCard = mainPage.creditPage();
@@ -240,4 +241,6 @@ public class CreditCardTest {
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkWarningUnderCvcField("Неверный формат");
     }
+
+ */
 }
