@@ -39,6 +39,7 @@ out/
 *.zip
 *.tar.gz
 *.rar
+*.hprof
 
 ### Exclusions ###
 !gradle/wrapper/gradle-wrapper.jar
