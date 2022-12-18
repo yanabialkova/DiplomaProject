@@ -17,22 +17,12 @@ public class APIHelper {
             .log(LogDetail.ALL)
             .build();
 
-    public static void createCard(DataHelper.CardInfo cardInfo) {
+    public static void createCard(DataHelper.CardInfo cardInfo,String path) {
         given()
                 .spec(requestSpec)
                 .body(cardInfo)
                 .when()
-                .post("/api/v1/pay")
-                .then()
-                .statusCode(200);
-    }
-
-    public static void createCreditCard(DataHelper.CardInfo cardInfo) {
-        given()
-                .spec(requestSpec)
-                .body(cardInfo)
-                .when()
-                .post("/api/v1/credit")
+                .post(path)
                 .then()
                 .statusCode(200);
     }

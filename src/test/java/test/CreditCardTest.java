@@ -35,7 +35,7 @@ public class CreditCardTest {
     @Test
     void shouldSuccessTransactionWithApprovedCreditCardThroughAPI() {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
-        APIHelper.createCreditCard(cardInfo);
+        APIHelper.createCard(cardInfo, "/api/v1/credit");
         var creditCardData = SQLHelper.getCreditCardData();
         assertEquals("APPROVED", creditCardData.getStatus());
     }
@@ -43,7 +43,7 @@ public class CreditCardTest {
     @Test
     void shouldSuccessTransactionWithDeclinedCreditCardThroughAPI() {
         var cardInfo = DataHelper.generateDataWithDeclinedCard();
-        APIHelper.createCreditCard(cardInfo);
+        APIHelper.createCard(cardInfo, "/api/v1/credit");
         var creditCardData = SQLHelper.getCreditCardData();
         assertEquals("DECLINED", creditCardData.getStatus());
     }
@@ -54,6 +54,8 @@ public class CreditCardTest {
         var cardInfo = DataHelper.generateDataWithDeclinedCard();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkErrorMessDeclineFromBank();
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("DECLINED", creditCardData.getStatus());
     }
 
     @Test
@@ -62,6 +64,8 @@ public class CreditCardTest {
         var cardInfo = DataHelper.generateDataWithApprovedCard();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkApprovedMessFromBank();
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("APPROVED", creditCardData.getStatus());
     }
 
     @Test
@@ -73,6 +77,8 @@ public class CreditCardTest {
                 String.valueOf(maxYear));
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
         toCreditCard.checkApprovedMessFromBank();
+        var creditCardData = SQLHelper.getCreditCardData();
+        assertEquals("APPROVED", creditCardData.getStatus());
     }
 
     //card
