@@ -11,13 +11,19 @@ import java.sql.SQLException;
 
 
 public class SQLHelper {
+    private static boolean runFromIdea = true;
 
     private static QueryRunner runner  = new QueryRunner();
-    private static  String url = System.getProperty("db.url");
-    private static  String userName = System.getProperty("db.username");
-    private static  String password = System.getProperty("db.password");
+    private static  String url = runFromIdea
+            ? "jdbc:mysql://localhost:3306/app"
+            : System.getProperty("db.url"); //"jdbc:mysql://localhost:3306/app";//
+    private static  String userName = runFromIdea
+            ? "app" : System.getProperty("db.username"); // "app";//
+    private static  String password = runFromIdea
+            ? "pass" : System.getProperty("db.password"); // "pass";//
 
     public SQLHelper(){
+
     }
 
     @SneakyThrows
@@ -25,6 +31,7 @@ public class SQLHelper {
         return DriverManager.getConnection(url, userName, password);
     }
 
+    @SneakyThrows
     public static DataHelper.CreditCardData getCreditCardData() {
         var cardDataSQL =  "SELECT * FROM credit_request_entity ORDER BY created DESC LIMIT 1";
         try (var conn = getConn()) {
@@ -37,6 +44,7 @@ public class SQLHelper {
         return null;
     }
 
+    @SneakyThrows
     public static DataHelper.PaymentCardData getPaymentCardData() {
         var cardDataSQL =  "SELECT * FROM payment_entity ORDER BY created DESC LIMIT 1";
         try (var conn = getConn()) {
