@@ -87,7 +87,7 @@ public class PaymentTest {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithNotApprovedCard();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
+        toPaymentPage.checkErrorMessDeclineFromBank();
     }
 
     @Test
@@ -95,7 +95,7 @@ public class PaymentTest {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithCardNumberFieldAreZero();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
+        toPaymentPage.checkWarningUnderCardNumberField("Неверный формат");
     }
 
     @Test
@@ -128,7 +128,7 @@ public class PaymentTest {
         var toPaymentPage = mainPage.paymentPage();
         var cardInfo = DataHelper.generateDataWithApprovedCardAndAllMonthNumberFieldAreZero();
         toPaymentPage.insertValidPaymentCardDataForBank(cardInfo);
-        toPaymentPage.checkWarningUnderCardNumberField("Неверный формат");
+        toPaymentPage.checkWarningUnderCardNumberField("Неверно указан срок действия карты");
     }
 
     @Test

@@ -87,15 +87,14 @@ public class CreditCardTest {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithNotApprovedCard();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
-    }
+        toCreditCard.checkErrorMessDeclineFromBank();    }
 
     @Test
     void shouldShowErrorIfAllCardNumberFieldAreZero() {
         var toCreditCard = mainPage.creditPage();
         var cardInfo = DataHelper.generateDataWithCardNumberFieldAreZero();
         toCreditCard.insertValidCreditCardDataForBank(cardInfo);
-        toCreditCard.checkWarningUnderCardNumberField("Ошибка! Банк отказал в проведении операции");
+        toCreditCard.checkWarningUnderCardNumberField("Неверный формат");
     }
 
     @Test
